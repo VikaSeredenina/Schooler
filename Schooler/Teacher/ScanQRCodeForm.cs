@@ -3,52 +3,55 @@ using MessagingToolkit.QRCode.Codec.Data;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
-using System.Threading;
-using System.Drawing.Imaging;
-using System.Security.Cryptography;
+using AForge.Video;
+using AForge.Video.DirectShow;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Schooler.Teacher
 {
     public partial class ScanQRCodeForm : Form
     {
-        VideoCapture capture;
-        Mat frame;
-        Bitmap image;
-        private Thread camera;
-        bool isCameraRunning = false;
-
         private MainTeacherForm teacherForm;
+        private FilterInfoCollection CaptureDevice;
+        private Image curImage;
         public ScanQRCodeForm(MainTeacherForm teacherForm)
         {
             InitializeComponent();
             this.teacherForm = teacherForm;
-            camera = new Thread(new ThreadStart(CaptureCameraCallback));
-            camera.Start();
+
+            CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            foreach (var device in CaptureDevice)
+                CaptureDeviceComboBox.Items.Add(device);
+            CaptureDeviceComboBox.SelectedItem = 1;
         }
 
-        private void CaptureCameraCallback()
+        private void FinalFrame_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            frame = new Mat();
-            capture = new VideoCapture(CaptureDevice.Any);
-            capture.Open(1);
+            // Получаем изображение с веб-камеры
+            Image image = (Bitmap)eventArgs.Frame.Clone();
 
-            if (capture.IsOpened())
+            // Определяем размер PictureBox
+            int pictureBoxWidth = CamPictureBox.Width;
+            int pictureBoxHeight = CamPictureBox.Height;
+
+            // Определяем размер полученного изображения
+            int imageWidth = image.Width;
+            int imageHeight = image.Height;
+
+            // Масштабируем изображение, если оно не помещается в PictureBox
+            if (imageWidth > pictureBoxWidth || imageHeight > pictureBoxHeight)
             {
-                while (isCameraRunning)
-                {
-
-                    capture.Read(frame);
-                    image = BitmapConverter.ToBitmap(frame);
-                    if (CamPictureBox.Image != null)
-                    {
-                        CamPictureBox.Image.Dispose();
-                    }
-                    CamPictureBox.Image = image;
-                }
+                float aspectRatio = Math.Min((float)pictureBoxWidth / imageWidth, (float)pictureBoxHeight / imageHeight);
+                int newWidth = (int)(imageWidth * aspectRatio);
+                int newHeight = (int)(imageHeight * aspectRatio);
+                Image scaledImage = image.GetThumbnailImage(newWidth, newHeight, null, IntPtr.Zero);
+                image.Dispose();
+                image = scaledImage;
             }
+
+            // Отображаем изображение на PictureBox
+            CamPictureBox.Image = image;
+            curImage = image;
         }
 
         private string RecognizeQRCode(string path)
@@ -60,6 +63,7 @@ namespace Schooler.Teacher
         private string RecognizeQRCode(Bitmap bmp)
         {
             QRCodeDecoder decoder = new QRCodeDecoder();
+            MessageBox.Show(decoder.Decode(new QRCodeBitmapImage(bmp)));
             return decoder.Decode(new QRCodeBitmapImage(bmp));
         }
 
@@ -69,6 +73,7 @@ namespace Schooler.Teacher
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
+                    MessageBox.Show(RecognizeQRCode(ofd.FileName));
                     teacherForm.CheckSchoolboy(RecognizeQRCode(ofd.FileName));
                 }
             }
@@ -76,16 +81,14 @@ namespace Schooler.Teacher
 
         private void ScanButton_Click(object sender, EventArgs e)
         {
-            if (isCameraRunning)
-            {
-                // Take snapshot of the current image generate by OpenCV in the Picture Box
-                Bitmap snapshot = new Bitmap(CamPictureBox.Image);
-                teacherForm.CheckSchoolboy(RecognizeQRCode(snapshot));
-            }
-            else
-            {
-                MessageBox.Show("Cannot take picture if the camera isn't capturing image!");
-            }
+            RecognizeQRCode((Bitmap)curImage);
+        }
+
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            var FinalFrame = new VideoCaptureDevice(CaptureDevice[CaptureDeviceComboBox.SelectedIndex].MonikerString);
+            FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
+            FinalFrame.Start();
         }
     }
 }

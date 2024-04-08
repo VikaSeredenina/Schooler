@@ -47,7 +47,7 @@ namespace Schooler.Teacher
 
                 if (curLesson == null)
                 {
-                    CurrentLessonLabel.Text = "-";
+                    CurrentLessonLabel.Text = "нет";
                     return;
                 }
 
@@ -59,13 +59,12 @@ namespace Schooler.Teacher
 
                 // Если сейчас идет урок, то выгружаем список класса
                 if (SchoolboysDataGridView.RowCount == 0)
-                    SchoolboysDataGridView.DataSource = await db.schoolboy
+                    SchoolboysDataGridView.DataSource = db.schoolboy
                         .Include(x => x.attendance)
                         .Include(x => x.QRKod)
                         .Include(x => x._class)
                         .Where(x => x.id_class == curClass.id_class)
-                        .ToListAsync();
-
+                        .ToList();
 
                 CurrentLessonLabel.Text = curLesson.name_predmet;
                 ClassLabel.Text = curClass.name_class;

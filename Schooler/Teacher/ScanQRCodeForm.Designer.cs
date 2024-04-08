@@ -31,6 +31,8 @@
             this.SelectQRCodeButton = new System.Windows.Forms.Button();
             this.CamPictureBox = new System.Windows.Forms.PictureBox();
             this.ScanButton = new System.Windows.Forms.Button();
+            this.CaptureDeviceComboBox = new System.Windows.Forms.ComboBox();
+            this.StartButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.CamPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,11 +64,31 @@
             this.ScanButton.UseVisualStyleBackColor = true;
             this.ScanButton.Click += new System.EventHandler(this.ScanButton_Click);
             // 
+            // CaptureDeviceComboBox
+            // 
+            this.CaptureDeviceComboBox.FormattingEnabled = true;
+            this.CaptureDeviceComboBox.Location = new System.Drawing.Point(289, 350);
+            this.CaptureDeviceComboBox.Name = "CaptureDeviceComboBox";
+            this.CaptureDeviceComboBox.Size = new System.Drawing.Size(121, 21);
+            this.CaptureDeviceComboBox.TabIndex = 3;
+            // 
+            // StartButton
+            // 
+            this.StartButton.Location = new System.Drawing.Point(208, 350);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(75, 23);
+            this.StartButton.TabIndex = 4;
+            this.StartButton.Text = "Старт";
+            this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
+            // 
             // ScanQRCodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(526, 385);
+            this.Controls.Add(this.StartButton);
+            this.Controls.Add(this.CaptureDeviceComboBox);
             this.Controls.Add(this.ScanButton);
             this.Controls.Add(this.CamPictureBox);
             this.Controls.Add(this.SelectQRCodeButton);
@@ -85,5 +107,7 @@
         private System.Windows.Forms.Button SelectQRCodeButton;
         private System.Windows.Forms.PictureBox CamPictureBox;
         private System.Windows.Forms.Button ScanButton;
+        private System.Windows.Forms.ComboBox CaptureDeviceComboBox;
+        private System.Windows.Forms.Button StartButton;
     }
 }
