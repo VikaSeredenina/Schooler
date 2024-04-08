@@ -23,7 +23,7 @@ namespace Schooler
         {
             // Устанавливаем контекст подключения
             StateSingleton.getInstance().connectionString =
-                $"Data Source=CompV;Initial Catalog=schollers;Integrated Security=True;User ID={UsernameTextBox.Text};Password={PasswordTextBox.Text};encrypt=False";
+                $"Data Source=DESKTOP-QL85CJN\\SQLEXPRESS;Initial Catalog=schollers;Integrated Security=True;User ID={UsernameTextBox.Text};Password={PasswordTextBox.Text};encrypt=False";
 			
 
 
@@ -32,11 +32,11 @@ namespace Schooler
             {
                 try
                 {
-                    if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('DIRECTORY')").First() == 0)
+                    if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('DIRECTORY')").First() == 1)
                         StateSingleton.getInstance().authState = AuthState.Director;
                     else if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('ADMINISTRATOR')").First() == 1)
                         StateSingleton.getInstance().authState = AuthState.Sysadmin;
-                    else if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('TEACHER')").First() == 1)
+                    else if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('TEACHER')").First() == 0)
                         StateSingleton.getInstance().authState = AuthState.Teacher;
 
                 }

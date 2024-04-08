@@ -1,12 +1,15 @@
 ﻿using Schooler.Database.Model;
 using System;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Schooler.Director
 {
     public partial class DirectorMainForm : Form
     {
+        private _class curClass = null;
         public DirectorMainForm()
         {
             InitializeComponent();
@@ -17,7 +20,49 @@ namespace Schooler.Director
             UpdateSchoolboysDataGridView();
             UpdateClassesDataGridView();
 			UpdateLessonDataGridView();
+            DefaultAttendense();
 		}
+
+        private void DefaultAttendense()
+        {
+            using (Database.Model.Context db = new Database.Model.Context())
+            {
+                // Задаем начальные значения
+                ClassComboBox.DataSource = db._class.ToList();
+                ClassComboBox.DisplayMember = "name_class";
+                curClass = (_class)ClassComboBox.SelectedItem;
+
+                LessonComboBox.DataSource = db.lesson.Where(x => x.id_class == ((_class)ClassComboBox.SelectedItem).id_class)
+                    .ToList();
+                LessonComboBox.DisplayMember = "name_predmet";
+
+                DayDateTimePicker.Value = DateTime.Now;
+
+                // Отображаем информацию
+                UpdateAttendense();
+            }
+        }
+
+        private void UpdateAttendense()
+        {
+            using (Database.Model.Context db = new Context())
+            {
+                if (curClass.id_class != ((_class)ClassComboBox.SelectedItem).id_class)
+                {
+                    LessonComboBox.DataSource = db.lesson.Where(x => x.id_class == ((_class)ClassComboBox.SelectedItem).id_class)
+                        .ToList();
+                    LessonComboBox.DisplayMember = "name_predmet";
+                    curClass = (_class)ClassComboBox.SelectedItem;
+                }
+
+                AttendenseDataGridView.DataSource =  db.attendance
+                        .Where(x => x.id_lesson == ((lesson)LessonComboBox.SelectedItem).id_lesson
+                        && EntityFunctions.TruncateTime(x.time_of_entry) == DayDateTimePicker.Value.Date)
+                        .Include(x => x.schoolboy)
+                        .Include(x => x.lesson)
+                        .ToList();
+            }
+        }
 
         /// <summary>
         /// Обновляет таблицу SchoolboysDataGridView
@@ -167,5 +212,10 @@ namespace Schooler.Director
 			ecf.FormClosed += Ecf_FormClosed;
 			ecf.ShowDialog();
 		}
-	}
+
+        private void AttendenseDataChanged(object sender, EventArgs e)
+        {
+            UpdateAttendense();
+        }
+    }
 }
