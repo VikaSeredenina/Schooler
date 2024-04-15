@@ -98,7 +98,7 @@ namespace Schooler.Teacher
 
         private void ScanQRButton_Click(object sender, EventArgs e)
         {
-            ScanQRCodeForm scf = new ScanQRCodeForm(this);
+            ScanQRCodeForm scf = new ScanQRCodeForm();
             scf.ShowDialog();
         }
 

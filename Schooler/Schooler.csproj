@@ -83,8 +83,8 @@
     <Compile Include="Database\Model\lesson.cs" />
     <Compile Include="Database\Model\QRKod.cs" />
     <Compile Include="Database\Model\schoolboy.cs" />
-    <Compile Include="Database\Model\sysdiagrams.cs" />
     <Compile Include="Database\Model\users.cs" />
+    <Compile Include="Director\AttendanceInfo.cs" />
     <Compile Include="Director\DirectorMainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -33,11 +33,16 @@ namespace Schooler.Database.Model
         [Column(TypeName = "date")]
         public DateTime date_of_birth { get; set; }
 
-        [Required]
-        [StringLength(11)]
-        public string contacts { get; set; }
+        [StringLength(250)]
+        public string parents_email { get; set; }
 
         public long id_class { get; set; }
+
+        [Column(TypeName = "image")]
+        public byte[] image { get; set; }
+
+        [StringLength(11)]
+        public string parents_phone_number { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<attendance> attendance { get; set; }

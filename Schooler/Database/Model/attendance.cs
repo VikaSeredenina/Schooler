@@ -20,8 +20,10 @@ namespace Schooler.Database.Model
 
         public Guid guid_schoolboy { get; set; }
 
-        public virtual schoolboy schoolboy { get; set; }
+        public DateTime? time_of_deportation { get; set; }
 
         public virtual lesson lesson { get; set; }
+
+        public virtual schoolboy schoolboy { get; set; }
     }
 }

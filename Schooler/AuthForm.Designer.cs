@@ -32,6 +32,7 @@
             this.AuthButton = new System.Windows.Forms.Button();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.UsernameTextBox = new System.Windows.Forms.TextBox();
+            this.OpenQRFormButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AuthLabel
@@ -68,11 +69,22 @@
             this.UsernameTextBox.Size = new System.Drawing.Size(203, 20);
             this.UsernameTextBox.TabIndex = 4;
             // 
+            // OpenQRFormButton
+            // 
+            this.OpenQRFormButton.Location = new System.Drawing.Point(91, 307);
+            this.OpenQRFormButton.Name = "OpenQRFormButton";
+            this.OpenQRFormButton.Size = new System.Drawing.Size(150, 23);
+            this.OpenQRFormButton.TabIndex = 8;
+            this.OpenQRFormButton.Text = "Открыть сканер QR-кода";
+            this.OpenQRFormButton.UseVisualStyleBackColor = true;
+            this.OpenQRFormButton.Click += new System.EventHandler(this.OpenQRFormButton_Click);
+            // 
             // AuthForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(317, 342);
+            this.Controls.Add(this.OpenQRFormButton);
             this.Controls.Add(this.AuthLabel);
             this.Controls.Add(this.AuthButton);
             this.Controls.Add(this.PasswordTextBox);
@@ -93,6 +105,7 @@
         private System.Windows.Forms.Button AuthButton;
         private System.Windows.Forms.TextBox PasswordTextBox;
         private System.Windows.Forms.TextBox UsernameTextBox;
+        private System.Windows.Forms.Button OpenQRFormButton;
     }
 }
 

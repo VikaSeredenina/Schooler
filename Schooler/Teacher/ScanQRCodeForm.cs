@@ -5,19 +5,20 @@ using System.Drawing;
 using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Schooler.Database.Model;
+using System.Linq;
+using System.Data.Entity.Core.Objects;
 
 namespace Schooler.Teacher
 {
     public partial class ScanQRCodeForm : Form
     {
-        private MainTeacherForm teacherForm;
         private FilterInfoCollection CaptureDevice;
         private Image curImage;
-        public ScanQRCodeForm(MainTeacherForm teacherForm)
+        private VideoCaptureDevice FinalFrame;
+        public ScanQRCodeForm()
         {
             InitializeComponent();
-            this.teacherForm = teacherForm;
 
             CaptureDevice = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (var device in CaptureDevice)
@@ -74,21 +75,56 @@ namespace Schooler.Teacher
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     MessageBox.Show(RecognizeQRCode(ofd.FileName));
-                    teacherForm.CheckSchoolboy(RecognizeQRCode(ofd.FileName));
                 }
             }
         }
 
         private void ScanButton_Click(object sender, EventArgs e)
         {
-            RecognizeQRCode((Bitmap)curImage);
+            string result = string.Empty;
+            try
+            {
+                result = RecognizeQRCode((Bitmap)curImage);
+            }
+            catch { MessageBox.Show("QR-код не распознан, попробуйте еще раз!"); return;  }
+
+            using (Database.Model.Context db = new Database.Model.Context())
+            {
+                var cAttendance = db.attendance
+                    .Where(x => x.time_of_entry.Year == DateTime.Now.Year
+                    && x.time_of_entry.Month == DateTime.Now.Month
+                    && x.time_of_entry.Day == DateTime.Now.Day)
+                    .FirstOrDefault();
+
+                if (cAttendance == null)
+                {
+
+                    attendance nAttendance = new attendance();
+                    nAttendance.status = true;
+                    nAttendance.id_lesson = 1;
+                    nAttendance.guid_schoolboy = Guid.Parse(result);
+                    nAttendance.time_of_entry = DateTime.Now;
+
+                    db.attendance.Add(nAttendance);
+                }
+                else
+                {
+                    cAttendance.time_of_deportation = DateTime.Now;
+                }
+                db.SaveChanges();
+            }
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            var FinalFrame = new VideoCaptureDevice(CaptureDevice[CaptureDeviceComboBox.SelectedIndex].MonikerString);
+            FinalFrame = new VideoCaptureDevice(CaptureDevice[CaptureDeviceComboBox.SelectedIndex].MonikerString);
             FinalFrame.NewFrame += new NewFrameEventHandler(FinalFrame_NewFrame);
             FinalFrame.Start();
+        }
+
+        private void ScanQRCodeForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            FinalFrame.Stop();
         }
     }
 }

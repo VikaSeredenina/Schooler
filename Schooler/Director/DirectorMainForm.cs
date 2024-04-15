@@ -1,5 +1,6 @@
 ﻿using Schooler.Database.Model;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace Schooler.Director
         {
             UpdateSchoolboysDataGridView();
             UpdateClassesDataGridView();
-			UpdateLessonDataGridView();
             DefaultAttendense();
 		}
 
@@ -32,10 +32,6 @@ namespace Schooler.Director
                 ClassComboBox.DisplayMember = "name_class";
                 curClass = (_class)ClassComboBox.SelectedItem;
 
-                LessonComboBox.DataSource = db.lesson.Where(x => x.id_class == ((_class)ClassComboBox.SelectedItem).id_class)
-                    .ToList();
-                LessonComboBox.DisplayMember = "name_predmet";
-
                 DayDateTimePicker.Value = DateTime.Now;
 
                 // Отображаем информацию
@@ -47,20 +43,21 @@ namespace Schooler.Director
         {
             using (Database.Model.Context db = new Context())
             {
-                if (curClass.id_class != ((_class)ClassComboBox.SelectedItem).id_class)
-                {
-                    LessonComboBox.DataSource = db.lesson.Where(x => x.id_class == ((_class)ClassComboBox.SelectedItem).id_class)
-                        .ToList();
-                    LessonComboBox.DisplayMember = "name_predmet";
-                    curClass = (_class)ClassComboBox.SelectedItem;
-                }
-
-                AttendenseDataGridView.DataSource =  db.attendance
-                        .Where(x => x.id_lesson == ((lesson)LessonComboBox.SelectedItem).id_lesson
+                var attendance = db.attendance
+                        .Where(x => x.id_lesson == 1
                         && EntityFunctions.TruncateTime(x.time_of_entry) == DayDateTimePicker.Value.Date)
                         .Include(x => x.schoolboy)
                         .Include(x => x.lesson)
                         .ToList();
+
+                List<AttendanceInfo> attendanceInfos = new List<AttendanceInfo>();
+
+                foreach (var att in attendance)
+                    attendanceInfos.Add(
+                        new AttendanceInfo { FullName = $"{att.schoolboy.surname} {att.schoolboy.name} {att.schoolboy.patronymic}", start = att.time_of_entry, end = att.time_of_deportation }
+                        );
+
+                AttendenseDataGridView.DataSource = attendanceInfos;
             }
         }
 
@@ -89,17 +86,6 @@ namespace Schooler.Director
                     .ToListAsync();
         }
 
-		/// <summary>
-		/// Обновляет таблицу LessonDataGridView
-		/// </summary>
-		private async void UpdateLessonDataGridView()
-		{
-			using (Database.Model.Context db = new Database.Model.Context())
-				LessonDataGridView.DataSource = await db.lesson
-					.Include(x => x.attendance)
-					.Include(x => x._class)
-					.ToListAsync();
-		}
 
 		private void DirectorMainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -191,27 +177,9 @@ namespace Schooler.Director
 
 		private void Elf_FormClosed(object sender, FormClosedEventArgs e)
 		{
-            UpdateLessonDataGridView();
+            //UpdateLessonDataGridView();
 		}
 
-		/// <summary>
-		/// Открытие формы изменения по двойному щелку на строку таблицы LessonDataGridView
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-
-		private void LessonDataGridView_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-		{
-			int id = int.Parse(LessonDataGridView.Rows[e.RowIndex].Cells["id_lesson"].Value.ToString());
-
-			lesson LeS = null;
-			using (Database.Model.Context db = new Database.Model.Context())
-				LeS = db.lesson.Find(id);
-
-			Shared.EditLessonForm ecf = new Shared.EditLessonForm(LeS);
-			ecf.FormClosed += Ecf_FormClosed;
-			ecf.ShowDialog();
-		}
 
         private void AttendenseDataChanged(object sender, EventArgs e)
         {

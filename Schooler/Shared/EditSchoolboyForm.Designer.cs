@@ -29,7 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.EditButton = new System.Windows.Forms.Button();
+            this.ClassComboBox = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.PhoneMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.BirthDateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -40,10 +41,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.SurnameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.EditButton = new System.Windows.Forms.Button();
             this.QRCodeGroupBox = new System.Windows.Forms.GroupBox();
             this.QRPictureBox = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.ClassComboBox = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.EmailTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.QRCodeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QRPictureBox)).BeginInit();
@@ -51,6 +53,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.EmailTextBox);
+            this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.ClassComboBox);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.PhoneMaskedTextBox);
@@ -65,27 +69,34 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(262, 199);
+            this.groupBox1.Size = new System.Drawing.Size(316, 228);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Информация о учащемся";
             // 
-            // EditButton
+            // ClassComboBox
             // 
-            this.EditButton.Location = new System.Drawing.Point(429, 220);
-            this.EditButton.Name = "EditButton";
-            this.EditButton.Size = new System.Drawing.Size(75, 23);
-            this.EditButton.TabIndex = 2;
-            this.EditButton.Text = "Добавить";
-            this.EditButton.UseVisualStyleBackColor = true;
-            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            this.ClassComboBox.FormattingEnabled = true;
+            this.ClassComboBox.Location = new System.Drawing.Point(116, 192);
+            this.ClassComboBox.Name = "ClassComboBox";
+            this.ClassComboBox.Size = new System.Drawing.Size(194, 21);
+            this.ClassComboBox.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 198);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Класс";
             // 
             // PhoneMaskedTextBox
             // 
-            this.PhoneMaskedTextBox.Location = new System.Drawing.Point(160, 137);
+            this.PhoneMaskedTextBox.Location = new System.Drawing.Point(161, 137);
             this.PhoneMaskedTextBox.Mask = "00000000000";
             this.PhoneMaskedTextBox.Name = "PhoneMaskedTextBox";
-            this.PhoneMaskedTextBox.Size = new System.Drawing.Size(77, 20);
+            this.PhoneMaskedTextBox.Size = new System.Drawing.Size(78, 20);
             this.PhoneMaskedTextBox.TabIndex = 9;
             // 
             // label5
@@ -93,15 +104,15 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 140);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(93, 13);
+            this.label5.Size = new System.Drawing.Size(149, 13);
             this.label5.TabIndex = 8;
-            this.label5.Text = "Номер телефона";
+            this.label5.Text = "Номер телефона родителей";
             // 
             // BirthDateTimePicker
             // 
             this.BirthDateTimePicker.Location = new System.Drawing.Point(98, 106);
             this.BirthDateTimePicker.Name = "BirthDateTimePicker";
-            this.BirthDateTimePicker.Size = new System.Drawing.Size(139, 20);
+            this.BirthDateTimePicker.Size = new System.Drawing.Size(212, 20);
             this.BirthDateTimePicker.TabIndex = 7;
             // 
             // label4
@@ -117,7 +128,7 @@
             // 
             this.PatronymicTextBox.Location = new System.Drawing.Point(68, 80);
             this.PatronymicTextBox.Name = "PatronymicTextBox";
-            this.PatronymicTextBox.Size = new System.Drawing.Size(169, 20);
+            this.PatronymicTextBox.Size = new System.Drawing.Size(242, 20);
             this.PatronymicTextBox.TabIndex = 5;
             // 
             // label3
@@ -133,7 +144,7 @@
             // 
             this.NameTextBox.Location = new System.Drawing.Point(68, 54);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(169, 20);
+            this.NameTextBox.Size = new System.Drawing.Size(242, 20);
             this.NameTextBox.TabIndex = 3;
             // 
             // label2
@@ -149,7 +160,7 @@
             // 
             this.SurnameTextBox.Location = new System.Drawing.Point(68, 28);
             this.SurnameTextBox.Name = "SurnameTextBox";
-            this.SurnameTextBox.Size = new System.Drawing.Size(169, 20);
+            this.SurnameTextBox.Size = new System.Drawing.Size(242, 20);
             this.SurnameTextBox.TabIndex = 1;
             // 
             // label1
@@ -161,10 +172,20 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Фамилия";
             // 
+            // EditButton
+            // 
+            this.EditButton.Location = new System.Drawing.Point(412, 220);
+            this.EditButton.Name = "EditButton";
+            this.EditButton.Size = new System.Drawing.Size(75, 23);
+            this.EditButton.TabIndex = 2;
+            this.EditButton.Text = "Добавить";
+            this.EditButton.UseVisualStyleBackColor = true;
+            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            // 
             // QRCodeGroupBox
             // 
             this.QRCodeGroupBox.Controls.Add(this.QRPictureBox);
-            this.QRCodeGroupBox.Location = new System.Drawing.Point(280, 12);
+            this.QRCodeGroupBox.Location = new System.Drawing.Point(334, 12);
             this.QRCodeGroupBox.Name = "QRCodeGroupBox";
             this.QRCodeGroupBox.Size = new System.Drawing.Size(227, 202);
             this.QRCodeGroupBox.TabIndex = 1;
@@ -181,28 +202,27 @@
             this.QRPictureBox.TabIndex = 0;
             this.QRPictureBox.TabStop = false;
             // 
-            // label6
+            // label7
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 169);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Класс";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 167);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(160, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Электронная почта родителей";
             // 
-            // ClassComboBox
+            // EmailTextBox
             // 
-            this.ClassComboBox.FormattingEnabled = true;
-            this.ClassComboBox.Location = new System.Drawing.Point(116, 163);
-            this.ClassComboBox.Name = "ClassComboBox";
-            this.ClassComboBox.Size = new System.Drawing.Size(121, 21);
-            this.ClassComboBox.TabIndex = 11;
+            this.EmailTextBox.Location = new System.Drawing.Point(172, 164);
+            this.EmailTextBox.Name = "EmailTextBox";
+            this.EmailTextBox.Size = new System.Drawing.Size(138, 20);
+            this.EmailTextBox.TabIndex = 13;
             // 
             // EditSchoolboyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(517, 252);
+            this.ClientSize = new System.Drawing.Size(573, 252);
             this.Controls.Add(this.EditButton);
             this.Controls.Add(this.QRCodeGroupBox);
             this.Controls.Add(this.groupBox1);
@@ -238,5 +258,7 @@
         private System.Windows.Forms.Button EditButton;
         private System.Windows.Forms.ComboBox ClassComboBox;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox EmailTextBox;
+        private System.Windows.Forms.Label label7;
     }
 }

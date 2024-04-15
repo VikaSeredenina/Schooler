@@ -46,7 +46,8 @@ namespace Schooler.Shared
             NameTextBox.Text = schoolboy.name;
             PatronymicTextBox.Text = schoolboy.patronymic;
             BirthDateTimePicker.Value = schoolboy.date_of_birth;
-            PhoneMaskedTextBox.Text = schoolboy.contacts;
+            PhoneMaskedTextBox.Text = schoolboy.parents_phone_number;
+            EmailTextBox.Text = schoolboy.parents_email;
         }
 
         // Отображение QR-кода при условии, что запись об учащемся уже существует
@@ -68,7 +69,8 @@ namespace Schooler.Shared
                 sc.name = NameTextBox.Text;
                 sc.patronymic = PatronymicTextBox.Text;
                 sc.date_of_birth = BirthDateTimePicker.Value;
-                sc.contacts = PhoneMaskedTextBox.Text;
+                sc.parents_phone_number = PhoneMaskedTextBox.Text;
+                sc.parents_email = EmailTextBox.Text;
                 sc.id_class = (ClassComboBox.SelectedItem as _class).id_class;
 
                 using (Database.Model.Context db = new Context())
@@ -88,7 +90,8 @@ namespace Schooler.Shared
                     cSc.name = NameTextBox.Text;
                     cSc.patronymic = PatronymicTextBox.Text;
                     cSc.date_of_birth = BirthDateTimePicker.Value;
-                    cSc.contacts = PhoneMaskedTextBox.Text;
+                    cSc.parents_phone_number = PhoneMaskedTextBox.Text;
+                    cSc.parents_email = EmailTextBox.Text;
                     cSc.id_class = (ClassComboBox.SelectedItem as _class).id_class;
 
                     db.SaveChanges();

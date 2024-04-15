@@ -16,7 +16,6 @@ namespace Schooler
 
         private StateSingleton()
         {
-           // authState = AuthState.NonAuth;
         }
 
         public static StateSingleton getInstance()

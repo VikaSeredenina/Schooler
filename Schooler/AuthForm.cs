@@ -17,27 +17,20 @@ namespace Schooler
         {
             InitializeComponent();
             StateSingleton.getInstance().authForm = this;
+            StateSingleton.getInstance().connectionString =
+                $"Data Source=DESKTOP-QL85CJN\\SQLEXPRESS;Initial Catalog=schollers;User ID={UsernameTextBox.Text};Password={PasswordTextBox.Text};Integrated Security=True;Encrypt=False";
         }
 
         private void AuthButton_Click(object sender, EventArgs e)
         {
-            // Устанавливаем контекст подключения
-            StateSingleton.getInstance().connectionString =
-                $"Data Source=DESKTOP-QL85CJN\\SQLEXPRESS;Initial Catalog=schollers;Integrated Security=True;User ID={UsernameTextBox.Text};Password={PasswordTextBox.Text};encrypt=False";
-			
-
-
-
 			using (Database.Model.Context db = new Database.Model.Context())
             {
                 try
                 {
-                    if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('DIRECTORY')").First() == 1)
+                    if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('DIRECTORY')").FirstOrDefault() == 0)
                         StateSingleton.getInstance().authState = AuthState.Director;
-                    else if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('ADMINISTRATOR')").First() == 1)
+                    else if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('ADMINISTRATOR')").FirstOrDefault() == 1)
                         StateSingleton.getInstance().authState = AuthState.Sysadmin;
-                    else if (db.Database.SqlQuery<int>("SELECT IS_MEMBER('TEACHER')").First() == 0)
-                        StateSingleton.getInstance().authState = AuthState.Teacher;
 
                 }
                 catch(Exception ex)
@@ -61,15 +54,16 @@ namespace Schooler
                     dmf.Show();
                     this.Hide();
                     break;
-                case AuthState.Teacher:
-                    Teacher.MainTeacherForm mtf = new Teacher.MainTeacherForm();
-                    mtf.Show();
-                    this.Hide();
-                    break;
                 default:
                     break;
             }
 
+        }
+
+        private void OpenQRFormButton_Click(object sender, EventArgs e)
+        {
+            Teacher.ScanQRCodeForm scf = new Teacher.ScanQRCodeForm();
+            scf.ShowDialog();
         }
     }
 }

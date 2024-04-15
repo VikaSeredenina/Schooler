@@ -97,6 +97,7 @@
             this.MinimizeBox = false;
             this.Name = "ScanQRCodeForm";
             this.Text = "Сканировать QR-код";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ScanQRCodeForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.CamPictureBox)).EndInit();
             this.ResumeLayout(false);
 

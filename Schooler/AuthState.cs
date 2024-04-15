@@ -10,7 +10,6 @@ namespace Schooler
     {
         NonAuth,
         Sysadmin,
-        Director,
-        Teacher
+        Director
     }
 }
