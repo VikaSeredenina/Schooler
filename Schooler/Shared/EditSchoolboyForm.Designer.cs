@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ParentFullNameTextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.EmailTextBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.ClassComboBox = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.PhoneMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -44,8 +48,7 @@
             this.EditButton = new System.Windows.Forms.Button();
             this.QRCodeGroupBox = new System.Windows.Forms.GroupBox();
             this.QRPictureBox = new System.Windows.Forms.PictureBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.EmailTextBox = new System.Windows.Forms.TextBox();
+            this.PrintQRCodeButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.QRCodeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QRPictureBox)).BeginInit();
@@ -53,6 +56,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ParentFullNameTextBox);
+            this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.EmailTextBox);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.ClassComboBox);
@@ -69,15 +74,47 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(316, 228);
+            this.groupBox1.Size = new System.Drawing.Size(316, 278);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Информация о учащемся";
             // 
+            // ParentFullNameTextBox
+            // 
+            this.ParentFullNameTextBox.Location = new System.Drawing.Point(101, 157);
+            this.ParentFullNameTextBox.Name = "ParentFullNameTextBox";
+            this.ParentFullNameTextBox.Size = new System.Drawing.Size(209, 20);
+            this.ParentFullNameTextBox.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 161);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(85, 13);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "ФИО Родителя";
+            // 
+            // EmailTextBox
+            // 
+            this.EmailTextBox.Location = new System.Drawing.Point(172, 210);
+            this.EmailTextBox.Name = "EmailTextBox";
+            this.EmailTextBox.Size = new System.Drawing.Size(138, 20);
+            this.EmailTextBox.TabIndex = 13;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 213);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(160, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Электронная почта родителей";
+            // 
             // ClassComboBox
             // 
             this.ClassComboBox.FormattingEnabled = true;
-            this.ClassComboBox.Location = new System.Drawing.Point(116, 192);
+            this.ClassComboBox.Location = new System.Drawing.Point(116, 238);
             this.ClassComboBox.Name = "ClassComboBox";
             this.ClassComboBox.Size = new System.Drawing.Size(194, 21);
             this.ClassComboBox.TabIndex = 11;
@@ -85,7 +122,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 198);
+            this.label6.Location = new System.Drawing.Point(6, 244);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(38, 13);
             this.label6.TabIndex = 10;
@@ -93,7 +130,7 @@
             // 
             // PhoneMaskedTextBox
             // 
-            this.PhoneMaskedTextBox.Location = new System.Drawing.Point(161, 137);
+            this.PhoneMaskedTextBox.Location = new System.Drawing.Point(161, 183);
             this.PhoneMaskedTextBox.Mask = "00000000000";
             this.PhoneMaskedTextBox.Name = "PhoneMaskedTextBox";
             this.PhoneMaskedTextBox.Size = new System.Drawing.Size(78, 20);
@@ -102,7 +139,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 140);
+            this.label5.Location = new System.Drawing.Point(6, 186);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(149, 13);
             this.label5.TabIndex = 8;
@@ -202,27 +239,22 @@
             this.QRPictureBox.TabIndex = 0;
             this.QRPictureBox.TabStop = false;
             // 
-            // label7
+            // PrintQRCodeButton
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 167);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(160, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Электронная почта родителей";
-            // 
-            // EmailTextBox
-            // 
-            this.EmailTextBox.Location = new System.Drawing.Point(172, 164);
-            this.EmailTextBox.Name = "EmailTextBox";
-            this.EmailTextBox.Size = new System.Drawing.Size(138, 20);
-            this.EmailTextBox.TabIndex = 13;
+            this.PrintQRCodeButton.Location = new System.Drawing.Point(389, 256);
+            this.PrintQRCodeButton.Name = "PrintQRCodeButton";
+            this.PrintQRCodeButton.Size = new System.Drawing.Size(122, 23);
+            this.PrintQRCodeButton.TabIndex = 3;
+            this.PrintQRCodeButton.Text = "Напечатать QR-код";
+            this.PrintQRCodeButton.UseVisualStyleBackColor = true;
+            this.PrintQRCodeButton.Click += new System.EventHandler(this.PrintQRCodeButton_Click);
             // 
             // EditSchoolboyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(573, 252);
+            this.ClientSize = new System.Drawing.Size(573, 319);
+            this.Controls.Add(this.PrintQRCodeButton);
             this.Controls.Add(this.EditButton);
             this.Controls.Add(this.QRCodeGroupBox);
             this.Controls.Add(this.groupBox1);
@@ -260,5 +292,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox EmailTextBox;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox ParentFullNameTextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button PrintQRCodeButton;
     }
 }

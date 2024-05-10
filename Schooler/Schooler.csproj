@@ -78,12 +78,11 @@
     </Compile>
     <Compile Include="AuthState.cs" />
     <Compile Include="Database\Model\attendance.cs" />
+    <Compile Include="Database\Model\authorization.cs" />
     <Compile Include="Database\Model\class.cs" />
     <Compile Include="Database\Model\Context.cs" />
-    <Compile Include="Database\Model\lesson.cs" />
-    <Compile Include="Database\Model\QRKod.cs" />
     <Compile Include="Database\Model\schoolboy.cs" />
-    <Compile Include="Database\Model\users.cs" />
+    <Compile Include="Database\Model\User.cs" />
     <Compile Include="Director\AttendanceInfo.cs" />
     <Compile Include="Director\DirectorMainForm.cs">
       <SubType>Form</SubType>
@@ -98,12 +97,6 @@
     </Compile>
     <Compile Include="Shared\EditClassForm.Designer.cs">
       <DependentUpon>EditClassForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shared\EditLessonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shared\EditLessonForm.Designer.cs">
-      <DependentUpon>EditLessonForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Shared\EditSchoolboyForm.cs">
       <SubType>Form</SubType>
@@ -141,9 +134,6 @@
     </Compile>
     <EmbeddedResource Include="Shared\EditClassForm.resx">
       <DependentUpon>EditClassForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shared\EditLessonForm.resx">
-      <DependentUpon>EditLessonForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shared\EditSchoolboyForm.resx">
       <DependentUpon>EditSchoolboyForm.cs</DependentUpon>

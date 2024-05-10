@@ -50,7 +50,7 @@ namespace Schooler.Shared
 
                 using (Database.Model.Context db = new Context())
                 {
-                    db._class.Add(nCl);
+                    db.classes.Add(nCl);
                     db.SaveChanges();
                 }
             }
@@ -59,7 +59,7 @@ namespace Schooler.Shared
             {
                 using (Database.Model.Context db = new Context())
                 {
-                    var cCl = db._class.Find(cl.id_class);
+                    var cCl = db.classes.Find(cl.id_class);
 
                     cCl.classroom_teacher = ClassroomTeacherTextBox.Text;
                     cCl.name_class = ClassNameTextBox.Text;

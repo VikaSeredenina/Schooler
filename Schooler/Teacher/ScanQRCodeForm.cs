@@ -70,12 +70,41 @@ namespace Schooler.Teacher
 
         private void SelectQRCodeButton_Click(object sender, EventArgs e)
         {
+            string result = string.Empty;
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show(RecognizeQRCode(ofd.FileName));
+                    result = RecognizeQRCode(ofd.FileName);
                 }
+            }
+
+            using (Database.Model.Context db = new Database.Model.Context())
+            {
+                Guid guid = Guid.Parse(result);
+                var cAttendance = db.attendances
+                    .Where(x => x.arrival_time.Value.Year == DateTime.Now.Year
+                    && x.arrival_time.Value.Month == DateTime.Now.Month
+                    && x.arrival_time.Value.Day == DateTime.Now.Day
+                    && x.guid == guid)
+                    .FirstOrDefault();
+
+                if (cAttendance == null)
+                {
+
+                    attendance nAttendance = new attendance();
+                    nAttendance.status = true;
+                    nAttendance.guid = Guid.Parse(result);
+                    nAttendance.data = DateTime.Now.Date;
+                    nAttendance.arrival_time = DateTime.Now;
+
+                    db.attendances.Add(nAttendance);
+                }
+                else
+                {
+                    cAttendance.time_of_departure = DateTime.Now;
+                }
+                db.SaveChanges();
             }
         }
 
@@ -90,10 +119,13 @@ namespace Schooler.Teacher
 
             using (Database.Model.Context db = new Database.Model.Context())
             {
-                var cAttendance = db.attendance
-                    .Where(x => x.time_of_entry.Year == DateTime.Now.Year
-                    && x.time_of_entry.Month == DateTime.Now.Month
-                    && x.time_of_entry.Day == DateTime.Now.Day)
+                Guid guid = Guid.Parse(result);
+
+                var cAttendance = db.attendances
+                    .Where(x => x.arrival_time.Value.Year == DateTime.Now.Year
+                    && x.arrival_time.Value.Month == DateTime.Now.Month
+                    && x.arrival_time.Value.Day == DateTime.Now.Day
+                    && x.guid == guid)
                     .FirstOrDefault();
 
                 if (cAttendance == null)
@@ -101,15 +133,15 @@ namespace Schooler.Teacher
 
                     attendance nAttendance = new attendance();
                     nAttendance.status = true;
-                    nAttendance.id_lesson = 1;
-                    nAttendance.guid_schoolboy = Guid.Parse(result);
-                    nAttendance.time_of_entry = DateTime.Now;
+                    nAttendance.guid = Guid.Parse(result);
+                    nAttendance.data = DateTime.Now.Date;
+                    nAttendance.arrival_time = DateTime.Now;
 
-                    db.attendance.Add(nAttendance);
+                    db.attendances.Add(nAttendance);
                 }
                 else
                 {
-                    cAttendance.time_of_deportation = DateTime.Now;
+                    cAttendance.time_of_departure = DateTime.Now;
                 }
                 db.SaveChanges();
             }

@@ -12,37 +12,28 @@ namespace Schooler.Database.Model
         {
         }
 
-        public virtual DbSet<attendance> attendance { get; set; }
-        public virtual DbSet<_class> _class { get; set; }
-        public virtual DbSet<lesson> lesson { get; set; }
-        public virtual DbSet<QRKod> QRKod { get; set; }
-        public virtual DbSet<schoolboy> schoolboy { get; set; }
-        public virtual DbSet<users> users { get; set; }
+        public virtual DbSet<attendance> attendances { get; set; }
+        public virtual DbSet<authorization> authorizations { get; set; }
+        public virtual DbSet<_class> classes { get; set; }
+        public virtual DbSet<schoolboy> schoolboys { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<authorization>()
+                .Property(e => e.login)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<authorization>()
+                .Property(e => e.password)
+                .IsUnicode(false);
+
             modelBuilder.Entity<_class>()
                 .Property(e => e.name_class)
                 .IsUnicode(false);
 
             modelBuilder.Entity<_class>()
                 .Property(e => e.classroom_teacher)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<lesson>()
-                .Property(e => e.name_predmet)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<lesson>()
-                .Property(e => e.teacher)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<lesson>()
-                .Property(e => e.day)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<QRKod>()
-                .Property(e => e.content)
                 .IsUnicode(false);
 
             modelBuilder.Entity<schoolboy>()
@@ -58,47 +49,26 @@ namespace Schooler.Database.Model
                 .IsUnicode(false);
 
             modelBuilder.Entity<schoolboy>()
+                .Property(e => e.surname_NP_parents)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<schoolboy>()
                 .Property(e => e.parents_email)
                 .IsUnicode(false);
 
             modelBuilder.Entity<schoolboy>()
-                .Property(e => e.parents_phone_number)
-                .IsFixedLength()
+                .Property(e => e.QR_kod)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<schoolboy>()
-                .HasMany(e => e.attendance)
-                .WithRequired(e => e.schoolboy)
-                .HasForeignKey(e => e.guid_schoolboy);
-
-            modelBuilder.Entity<schoolboy>()
-                .HasMany(e => e.QRKod)
-                .WithRequired(e => e.schoolboy)
-                .HasForeignKey(e => e.id_schoolboy);
-
-            modelBuilder.Entity<users>()
-                .Property(e => e.login)
+            modelBuilder.Entity<User>()
+                .Property(e => e.username)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<users>()
-                .Property(e => e.password)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<users>()
-                .Property(e => e.role)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<users>()
-                .Property(e => e.last_name_user)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<users>()
-                .Property(e => e.name_user)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<users>()
-                .Property(e => e.patronymic_user)
-                .IsUnicode(false);
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.authorizations)
+                .WithRequired(e => e.User)
+                .HasForeignKey(e => e.user_id)
+                .WillCascadeOnDelete(false);
         }
     }
 }

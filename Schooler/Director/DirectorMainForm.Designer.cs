@@ -48,6 +48,10 @@
             this.добавитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.классыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
+            this.SchoolerComboBox = new System.Windows.Forms.ComboBox();
+            this.AllSearchCheckBox = new System.Windows.Forms.CheckBox();
+            this.NoAttendanceCheckBox = new System.Windows.Forms.CheckBox();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -152,6 +156,10 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.NoAttendanceCheckBox);
+            this.tabPage4.Controls.Add(this.AllSearchCheckBox);
+            this.tabPage4.Controls.Add(this.label2);
+            this.tabPage4.Controls.Add(this.SchoolerComboBox);
             this.tabPage4.Controls.Add(this.AttendenseDataGridView);
             this.tabPage4.Controls.Add(this.DayDateTimePicker);
             this.tabPage4.Controls.Add(this.label3);
@@ -243,7 +251,7 @@
             // добавитьToolStripMenuItem1
             // 
             this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
-            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
             this.добавитьToolStripMenuItem1.Text = "Добавить";
             this.добавитьToolStripMenuItem1.Click += new System.EventHandler(this.AddSchoolboyToolStripMenuItem1_Click);
             // 
@@ -261,6 +269,46 @@
             this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.AddClassToolStripMenuItem_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Ученик";
+            // 
+            // SchoolerComboBox
+            // 
+            this.SchoolerComboBox.FormattingEnabled = true;
+            this.SchoolerComboBox.Location = new System.Drawing.Point(111, 79);
+            this.SchoolerComboBox.Name = "SchoolerComboBox";
+            this.SchoolerComboBox.Size = new System.Drawing.Size(121, 21);
+            this.SchoolerComboBox.TabIndex = 8;
+            this.SchoolerComboBox.SelectedIndexChanged += new System.EventHandler(this.AttendenseDataChanged);
+            // 
+            // AllSearchCheckBox
+            // 
+            this.AllSearchCheckBox.AutoSize = true;
+            this.AllSearchCheckBox.Location = new System.Drawing.Point(11, 98);
+            this.AllSearchCheckBox.Name = "AllSearchCheckBox";
+            this.AllSearchCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.AllSearchCheckBox.TabIndex = 10;
+            this.AllSearchCheckBox.Text = "Поиск по всем";
+            this.AllSearchCheckBox.UseVisualStyleBackColor = true;
+            this.AllSearchCheckBox.CheckedChanged += new System.EventHandler(this.AllSearchCheckBox_CheckedChanged);
+            // 
+            // NoAttendanceCheckBox
+            // 
+            this.NoAttendanceCheckBox.AutoSize = true;
+            this.NoAttendanceCheckBox.Location = new System.Drawing.Point(8, 374);
+            this.NoAttendanceCheckBox.Name = "NoAttendanceCheckBox";
+            this.NoAttendanceCheckBox.Size = new System.Drawing.Size(153, 17);
+            this.NoAttendanceCheckBox.TabIndex = 11;
+            this.NoAttendanceCheckBox.Text = "Показать не посетивших";
+            this.NoAttendanceCheckBox.UseVisualStyleBackColor = true;
+            this.NoAttendanceCheckBox.CheckedChanged += new System.EventHandler(this.NoAttendanceCheckBox_CheckedChanged);
             // 
             // DirectorMainForm
             // 
@@ -315,5 +363,9 @@
         private System.Windows.Forms.ComboBox ClassComboBox;
         private System.Windows.Forms.DateTimePicker DayDateTimePicker;
         private System.Windows.Forms.DataGridView AttendenseDataGridView;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox SchoolerComboBox;
+        private System.Windows.Forms.CheckBox AllSearchCheckBox;
+        private System.Windows.Forms.CheckBox NoAttendanceCheckBox;
     }
 }

@@ -12,17 +12,16 @@ namespace Schooler.Database.Model
         [Key]
         public long id_attendance { get; set; }
 
-        public DateTime time_of_entry { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime data { get; set; }
+
+        public DateTime? arrival_time { get; set; }
+
+        public DateTime? time_of_departure { get; set; }
 
         public bool status { get; set; }
 
-        public long id_lesson { get; set; }
-
-        public Guid guid_schoolboy { get; set; }
-
-        public DateTime? time_of_deportation { get; set; }
-
-        public virtual lesson lesson { get; set; }
+        public Guid guid { get; set; }
 
         public virtual schoolboy schoolboy { get; set; }
     }

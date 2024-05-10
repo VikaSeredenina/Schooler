@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Windows.Forms;
 
 namespace Schooler.Director
@@ -28,36 +29,19 @@ namespace Schooler.Director
             using (Database.Model.Context db = new Database.Model.Context())
             {
                 // Задаем начальные значения
-                ClassComboBox.DataSource = db._class.ToList();
+                ClassComboBox.DataSource = db.classes.ToList();
                 ClassComboBox.DisplayMember = "name_class";
                 curClass = (_class)ClassComboBox.SelectedItem;
+
+                SchoolerComboBox.DataSource = db.schoolboys
+                        .Where(x => x.id_class == curClass.id_class)
+                        .ToList();
+                SchoolerComboBox.DisplayMember = "surname";
 
                 DayDateTimePicker.Value = DateTime.Now;
 
                 // Отображаем информацию
                 UpdateAttendense();
-            }
-        }
-
-        private void UpdateAttendense()
-        {
-            using (Database.Model.Context db = new Context())
-            {
-                var attendance = db.attendance
-                        .Where(x => x.id_lesson == 1
-                        && EntityFunctions.TruncateTime(x.time_of_entry) == DayDateTimePicker.Value.Date)
-                        .Include(x => x.schoolboy)
-                        .Include(x => x.lesson)
-                        .ToList();
-
-                List<AttendanceInfo> attendanceInfos = new List<AttendanceInfo>();
-
-                foreach (var att in attendance)
-                    attendanceInfos.Add(
-                        new AttendanceInfo { FullName = $"{att.schoolboy.surname} {att.schoolboy.name} {att.schoolboy.patronymic}", start = att.time_of_entry, end = att.time_of_deportation }
-                        );
-
-                AttendenseDataGridView.DataSource = attendanceInfos;
             }
         }
 
@@ -67,10 +51,9 @@ namespace Schooler.Director
         private async void UpdateSchoolboysDataGridView()
         {
             using (Database.Model.Context db = new Database.Model.Context())
-                SchoolboysDataGridView.DataSource = await db.schoolboy
-                    .Include(x => x.attendance)
+                SchoolboysDataGridView.DataSource = await db.schoolboys
+                    .Include(x => x.attendances)
                     .Include(x => x._class)
-                    .Include(x => x.QRKod)
                     .ToListAsync();
         }
 
@@ -80,9 +63,8 @@ namespace Schooler.Director
         private async void UpdateClassesDataGridView()
         {
             using (Database.Model.Context db = new Database.Model.Context())
-                ClassesDataGridView.DataSource = await db._class
-                    .Include(x => x.schoolboy)
-                    .Include(x => x.lesson)
+                ClassesDataGridView.DataSource = await db.classes
+                    .Include(x => x.schoolboys)
                     .ToListAsync();
         }
 
@@ -121,7 +103,7 @@ namespace Schooler.Director
 
             _class cCl = null;
             using (Database.Model.Context db = new Database.Model.Context())
-                cCl = db._class.Find(id);
+                cCl = db.classes.Find(id);
 
             Shared.EditClassForm ecf = new Shared.EditClassForm(cCl);
             ecf.FormClosed += Ecf_FormClosed;
@@ -156,7 +138,7 @@ namespace Schooler.Director
 
             schoolboy sc = null;
             using (Database.Model.Context db = new Database.Model.Context())
-                sc = db.schoolboy.Find(guid);
+                sc = db.schoolboys.Find(guid);
 
             Shared.EditSchoolboyForm esf = new Shared.EditSchoolboyForm(sc);
             esf.FormClosed += Esf_FormClosed;
@@ -168,22 +150,86 @@ namespace Schooler.Director
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void добавитьToolStripMenuItem2_Click(object sender, EventArgs e)
-		{
-			Shared.EditLessonForm elf = new Shared.EditLessonForm();
-			elf.FormClosed += Elf_FormClosed;
-			elf.ShowDialog();
-		}
-
-		private void Elf_FormClosed(object sender, FormClosedEventArgs e)
-		{
-            //UpdateLessonDataGridView();
-		}
 
 
         private void AttendenseDataChanged(object sender, EventArgs e)
         {
             UpdateAttendense();
+        }
+
+
+        private void UpdateAttendense()
+        {
+            using (Context db = new Context()) {
+
+                // Поиск по всем
+                if (AllSearchCheckBox.Checked)
+                {
+                    int classId = (int)(ClassComboBox.SelectedItem as _class).id_class;
+
+                    var all = db.attendances
+                        .Include(x => x.schoolboy)
+                        .Where(x => x.schoolboy.id_class == classId
+                        && x.data.Year == DayDateTimePicker.Value.Year
+                        && x.data.Month == DayDateTimePicker.Value.Month
+                        && x.data.Day == DayDateTimePicker.Value.Day)
+                        .ToList();
+
+                    AttendenseDataGridView.DataSource = all;
+                        
+                }
+                // Поиск по ученику
+                else
+                {
+                    int classId = (int)(ClassComboBox.SelectedItem as _class).id_class;
+                    Guid sGuid = (SchoolerComboBox.SelectedItem as schoolboy).guid;
+
+                    var all = db.attendances
+                        .Include(x => x.schoolboy)
+                        .Where(x => x.schoolboy.id_class == classId
+                        && x.data.Year == DayDateTimePicker.Value.Year
+                        && x.data.Month == DayDateTimePicker.Value.Month
+                        && x.data.Day == DayDateTimePicker.Value.Day
+                        && x.schoolboy.guid == sGuid)
+                        .ToList();
+
+                    AttendenseDataGridView.DataSource = all;
+                }
+
+            }
+        }
+
+        private void AllSearchCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AllSearchCheckBox.Checked)
+                SchoolerComboBox.Enabled = false;
+            else SchoolerComboBox.Enabled = true;
+            UpdateAttendense();
+        }
+
+        private void NoAttendanceCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (NoAttendanceCheckBox.Checked)
+            {
+                int classId = (int)(ClassComboBox.SelectedItem as _class).id_class;
+                Guid sGuid = (SchoolerComboBox.SelectedItem as schoolboy).guid;
+
+                using (Context db = new Context())
+                {
+                    var nonAtt = db.schoolboys
+                        .Include(x => x.attendances)
+                        .Include(x => x._class)
+                        .Where(x => x.attendances
+                            .Where(y => y.data.Year == DayDateTimePicker.Value.Year
+                            && y.data.Month == DayDateTimePicker.Value.Month
+                            && y.data.Day == DayDateTimePicker.Value.Day).ToList().Count == 0
+                        )
+                        .ToList();
+
+                    AttendenseDataGridView.DataSource = nonAtt;
+                }
+            }
+            else UpdateAttendense();
         }
     }
 }

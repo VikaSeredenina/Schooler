@@ -3,6 +3,7 @@ using Schooler.Database.Model;
 using System;
 using System.Data.Entity;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Windows.Forms;
 
 namespace Schooler.Shared
@@ -36,7 +37,7 @@ namespace Schooler.Shared
         private async void FillClasses()
         {
             using (Database.Model.Context db = new Context())
-                ClassComboBox.DataSource = await db._class.ToListAsync();
+                ClassComboBox.DataSource = await db.classes.ToListAsync();
             ClassComboBox.DisplayMember = "name_class";
         }
 
@@ -48,6 +49,7 @@ namespace Schooler.Shared
             BirthDateTimePicker.Value = schoolboy.date_of_birth;
             PhoneMaskedTextBox.Text = schoolboy.parents_phone_number;
             EmailTextBox.Text = schoolboy.parents_email;
+            ParentFullNameTextBox.Text = schoolboy.surname_NP_parents;
         }
 
         // Отображение QR-кода при условии, что запись об учащемся уже существует
@@ -56,6 +58,14 @@ namespace Schooler.Shared
             QRCodeEncoder encoder = new QRCodeEncoder();
             Bitmap qrCode = encoder.Encode(schoolboy.guid.ToString());
             QRPictureBox.Image = qrCode;
+        }
+
+        private Image GetQR()
+        {
+            QRCodeEncoder encoder = new QRCodeEncoder();
+            Bitmap qrCode = encoder.Encode(schoolboy.guid.ToString());
+
+            return qrCode;
         }
 
         private void EditButton_Click(object sender, EventArgs e)
@@ -72,10 +82,11 @@ namespace Schooler.Shared
                 sc.parents_phone_number = PhoneMaskedTextBox.Text;
                 sc.parents_email = EmailTextBox.Text;
                 sc.id_class = (ClassComboBox.SelectedItem as _class).id_class;
+                sc.surname_NP_parents = ParentFullNameTextBox.Text;
 
                 using (Database.Model.Context db = new Context())
                 {
-                    db.schoolboy.Add(sc);
+                    db.schoolboys.Add(sc);
                     db.SaveChanges();
                 }
             }
@@ -84,7 +95,7 @@ namespace Schooler.Shared
             {
                 using (Database.Model.Context db = new Context())
                 {
-                    var cSc = db.schoolboy.Find(schoolboy.guid);
+                    var cSc = db.schoolboys.Find(schoolboy.guid);
 
                     cSc.surname = SurnameTextBox.Text;
                     cSc.name = NameTextBox.Text;
@@ -93,11 +104,26 @@ namespace Schooler.Shared
                     cSc.parents_phone_number = PhoneMaskedTextBox.Text;
                     cSc.parents_email = EmailTextBox.Text;
                     cSc.id_class = (ClassComboBox.SelectedItem as _class).id_class;
+                    cSc.surname_NP_parents = ParentFullNameTextBox.Text;
 
                     db.SaveChanges();
                 }
             }
             this.Close();
+        }
+
+        private void PrintQRCodeButton_Click(object sender, EventArgs e)
+        {
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += Pd_PrintPage;
+            pd.Print();
+        }
+
+        private void Pd_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Image img = GetQR();
+            Point loc = new Point(100, 100);
+            e.Graphics.DrawImage(img, loc);
         }
     }
 }

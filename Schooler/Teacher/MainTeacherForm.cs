@@ -28,51 +28,39 @@ namespace Schooler.Teacher
             days.Add("Sunday", "Воскресенье");
         }
 
-        public async void CheckSchoolboy(string guid)
-        {
-            using (Database.Model.Context db = new Database.Model.Context())
-            {
-                // Получаем учащегося
-                var sc = await db.schoolboy
-                    .FindAsync(Guid.Parse(guid));
+        //public async void CheckSchoolboy(string guid)
+        //{
+        //    using (Database.Model.Context db = new Database.Model.Context())
+        //    {
+        //        // Получаем учащегося
+        //        var sc = await db.schoolboys
+        //            .FindAsync(Guid.Parse(guid));
 
-                // Определяем класс и текущий урок
-                curClass = sc._class;
-                var curLesson = sc._class.lesson
-                    .Where(x => (x.id_class == sc.id_class) 
-                    && (x.start_time < DateTime.Now.TimeOfDay 
-                    && x.end_time > DateTime.Now.TimeOfDay)
-                    && (x.day == days[DateTime.Now.DayOfWeek.ToString()]))
-                    .FirstOrDefault();
+        //        // Определяем класс и текущий урок
+        //        curClass = sc._class;
 
-                if (curLesson == null)
-                {
-                    CurrentLessonLabel.Text = "нет";
-                    return;
-                }
+        //        if (sc._class.id_class != curClass.id_class)
+        //        {
+        //            MessageBox.Show($"Ученик не входит в класс {curClass.name_class}!");
+        //            return;
+        //        }
 
-                if (sc._class.id_class != curClass.id_class)
-                {
-                    MessageBox.Show($"Ученик не входит в класс {curClass.name_class}!");
-                    return;
-                }
+        //        // Если сейчас идет урок, то выгружаем список класса
+        //        if (SchoolboysDataGridView.RowCount == 0)
+        //            SchoolboysDataGridView.DataSource = db.schoolboy
+        //                .Include(x => x.attendance)
+        //                .Include(x => x.QRKod)
+        //                .Include(x => x._class)
+        //                .Where(x => x.id_class == curClass.id_class)
+        //                .ToList();
 
-                // Если сейчас идет урок, то выгружаем список класса
-                if (SchoolboysDataGridView.RowCount == 0)
-                    SchoolboysDataGridView.DataSource = db.schoolboy
-                        .Include(x => x.attendance)
-                        .Include(x => x.QRKod)
-                        .Include(x => x._class)
-                        .Where(x => x.id_class == curClass.id_class)
-                        .ToList();
-
-                CurrentLessonLabel.Text = curLesson.name_predmet;
-                ClassLabel.Text = curClass.name_class;
+        //        CurrentLessonLabel.Text = curLesson.name_predmet;
+        //        ClassLabel.Text = curClass.name_class;
         
-                AddSchoolBoyAttendense(sc.guid, curLesson.id_lesson);
-                ChangeColorAttendeseSchoolboy(sc.guid);
-            }
-        }
+        //        AddSchoolBoyAttendense(sc.guid, curLesson.id_lesson);
+        //        ChangeColorAttendeseSchoolboy(sc.guid);
+        //    }
+        //}
 
         private void ChangeColorAttendeseSchoolboy(Guid guid)
         {
@@ -87,11 +75,10 @@ namespace Schooler.Teacher
             {
                 attendance att = new attendance();
                 att.status = true;
-                att.guid_schoolboy = guid;
-                att.id_lesson = id_lesson;
-                att.time_of_entry = DateTime.Now;
+                att.guid = guid;
+                att.arrival_time = DateTime.Now;
 
-                db.attendance.Add(att);
+                db.attendances.Add(att);
                 db.SaveChanges();
             }
         }
