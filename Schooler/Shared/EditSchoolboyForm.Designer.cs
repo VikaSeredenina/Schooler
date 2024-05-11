@@ -49,9 +49,14 @@
             this.QRCodeGroupBox = new System.Windows.Forms.GroupBox();
             this.QRPictureBox = new System.Windows.Forms.PictureBox();
             this.PrintQRCodeButton = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.SchoolerPictureBox = new System.Windows.Forms.PictureBox();
+            this.LoadImageButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.QRCodeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QRPictureBox)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SchoolerPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -72,7 +77,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.SurnameTextBox);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(245, 88);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(316, 278);
             this.groupBox1.TabIndex = 0;
@@ -211,9 +216,9 @@
             // 
             // EditButton
             // 
-            this.EditButton.Location = new System.Drawing.Point(412, 220);
+            this.EditButton.Location = new System.Drawing.Point(254, 430);
             this.EditButton.Name = "EditButton";
-            this.EditButton.Size = new System.Drawing.Size(75, 23);
+            this.EditButton.Size = new System.Drawing.Size(307, 46);
             this.EditButton.TabIndex = 2;
             this.EditButton.Text = "Добавить";
             this.EditButton.UseVisualStyleBackColor = true;
@@ -222,7 +227,7 @@
             // QRCodeGroupBox
             // 
             this.QRCodeGroupBox.Controls.Add(this.QRPictureBox);
-            this.QRCodeGroupBox.Location = new System.Drawing.Point(334, 12);
+            this.QRCodeGroupBox.Location = new System.Drawing.Point(12, 250);
             this.QRCodeGroupBox.Name = "QRCodeGroupBox";
             this.QRCodeGroupBox.Size = new System.Drawing.Size(227, 202);
             this.QRCodeGroupBox.TabIndex = 1;
@@ -241,19 +246,51 @@
             // 
             // PrintQRCodeButton
             // 
-            this.PrintQRCodeButton.Location = new System.Drawing.Point(389, 256);
+            this.PrintQRCodeButton.Location = new System.Drawing.Point(12, 455);
             this.PrintQRCodeButton.Name = "PrintQRCodeButton";
-            this.PrintQRCodeButton.Size = new System.Drawing.Size(122, 23);
+            this.PrintQRCodeButton.Size = new System.Drawing.Size(224, 23);
             this.PrintQRCodeButton.TabIndex = 3;
             this.PrintQRCodeButton.Text = "Напечатать QR-код";
             this.PrintQRCodeButton.UseVisualStyleBackColor = true;
             this.PrintQRCodeButton.Click += new System.EventHandler(this.PrintQRCodeButton_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.SchoolerPictureBox);
+            this.groupBox2.Location = new System.Drawing.Point(12, 9);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(227, 202);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Изображение";
+            // 
+            // SchoolerPictureBox
+            // 
+            this.SchoolerPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SchoolerPictureBox.Location = new System.Drawing.Point(3, 16);
+            this.SchoolerPictureBox.Name = "SchoolerPictureBox";
+            this.SchoolerPictureBox.Size = new System.Drawing.Size(221, 183);
+            this.SchoolerPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.SchoolerPictureBox.TabIndex = 0;
+            this.SchoolerPictureBox.TabStop = false;
+            // 
+            // LoadImageButton
+            // 
+            this.LoadImageButton.Location = new System.Drawing.Point(15, 214);
+            this.LoadImageButton.Name = "LoadImageButton";
+            this.LoadImageButton.Size = new System.Drawing.Size(221, 23);
+            this.LoadImageButton.TabIndex = 4;
+            this.LoadImageButton.Text = "Загрузить изображение";
+            this.LoadImageButton.UseVisualStyleBackColor = true;
+            this.LoadImageButton.Click += new System.EventHandler(this.LoadImageButton_Click);
+            // 
             // EditSchoolboyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(573, 319);
+            this.ClientSize = new System.Drawing.Size(573, 488);
+            this.Controls.Add(this.LoadImageButton);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.PrintQRCodeButton);
             this.Controls.Add(this.EditButton);
             this.Controls.Add(this.QRCodeGroupBox);
@@ -268,6 +305,8 @@
             this.groupBox1.PerformLayout();
             this.QRCodeGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.QRPictureBox)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SchoolerPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -295,5 +334,8 @@
         private System.Windows.Forms.TextBox ParentFullNameTextBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button PrintQRCodeButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.PictureBox SchoolerPictureBox;
+        private System.Windows.Forms.Button LoadImageButton;
     }
 }

@@ -48,6 +48,7 @@ namespace Schooler.Database.Model
 
         [StringLength(100)]
         public string QR_kod { get; set; }
+        public string parent_telegramm_id { get; set; }
 
         public long id_class { get; set; }
 

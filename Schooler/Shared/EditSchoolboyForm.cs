@@ -4,6 +4,7 @@ using System;
 using System.Data.Entity;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Schooler.Shared
@@ -11,6 +12,7 @@ namespace Schooler.Shared
     public partial class EditSchoolboyForm : Form
     {
         private schoolboy schoolboy = null;
+        private byte[] imageBytes;
         public EditSchoolboyForm()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace Schooler.Shared
             {
                 FillInfo();
                 GetQRCode();
+                GetPicture();
             }
         }
 
@@ -50,6 +53,25 @@ namespace Schooler.Shared
             PhoneMaskedTextBox.Text = schoolboy.parents_phone_number;
             EmailTextBox.Text = schoolboy.parents_email;
             ParentFullNameTextBox.Text = schoolboy.surname_NP_parents;
+        }
+
+        private void GetPicture()
+        {
+            using (Context db = new Context())
+            {
+                // получаем байты изображения
+                var bImage = schoolboy.image;
+                if (bImage == null) return;
+                SchoolerPictureBox.Image = ByteToPicture(bImage);
+
+            }
+        }
+
+        private Image ByteToPicture(byte[] stream)
+        {
+            // Преобразуем в изображение
+            using (var ms = new MemoryStream(stream))
+                return Image.FromStream(ms);
         }
 
         // Отображение QR-кода при условии, что запись об учащемся уже существует
@@ -84,6 +106,9 @@ namespace Schooler.Shared
                 sc.id_class = (ClassComboBox.SelectedItem as _class).id_class;
                 sc.surname_NP_parents = ParentFullNameTextBox.Text;
 
+                if (imageBytes.Length != 0)
+                    sc.image = imageBytes;
+
                 using (Database.Model.Context db = new Context())
                 {
                     db.schoolboys.Add(sc);
@@ -106,6 +131,9 @@ namespace Schooler.Shared
                     cSc.id_class = (ClassComboBox.SelectedItem as _class).id_class;
                     cSc.surname_NP_parents = ParentFullNameTextBox.Text;
 
+                    if (imageBytes.Length != 0)
+                        cSc.image = imageBytes;
+
                     db.SaveChanges();
                 }
             }
@@ -124,6 +152,17 @@ namespace Schooler.Shared
             Image img = GetQR();
             Point loc = new Point(100, 100);
             e.Graphics.DrawImage(img, loc);
+        }
+
+        private void LoadImageButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "PNG файлы|*.png";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                imageBytes = File.ReadAllBytes(openFileDialog.FileName);
+
+            SchoolerPictureBox.Image = Image.FromFile(openFileDialog.FileName);
         }
     }
 }

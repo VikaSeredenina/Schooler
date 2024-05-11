@@ -33,7 +33,9 @@
             this.ScanButton = new System.Windows.Forms.Button();
             this.CaptureDeviceComboBox = new System.Windows.Forms.ComboBox();
             this.StartButton = new System.Windows.Forms.Button();
+            this.SchoolerImagePictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.CamPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SchoolerImagePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // SelectQRCodeButton
@@ -82,11 +84,20 @@
             this.StartButton.UseVisualStyleBackColor = true;
             this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
+            // SchoolerImagePictureBox
+            // 
+            this.SchoolerImagePictureBox.Location = new System.Drawing.Point(570, 12);
+            this.SchoolerImagePictureBox.Name = "SchoolerImagePictureBox";
+            this.SchoolerImagePictureBox.Size = new System.Drawing.Size(155, 138);
+            this.SchoolerImagePictureBox.TabIndex = 5;
+            this.SchoolerImagePictureBox.TabStop = false;
+            // 
             // ScanQRCodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 385);
+            this.ClientSize = new System.Drawing.Size(771, 385);
+            this.Controls.Add(this.SchoolerImagePictureBox);
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.CaptureDeviceComboBox);
             this.Controls.Add(this.ScanButton);
@@ -99,6 +110,7 @@
             this.Text = "Сканировать QR-код";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ScanQRCodeForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.CamPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SchoolerImagePictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -110,5 +122,6 @@
         private System.Windows.Forms.Button ScanButton;
         private System.Windows.Forms.ComboBox CaptureDeviceComboBox;
         private System.Windows.Forms.Button StartButton;
+        private System.Windows.Forms.PictureBox SchoolerImagePictureBox;
     }
 }

@@ -8,6 +8,8 @@ using AForge.Video.DirectShow;
 using Schooler.Database.Model;
 using System.Linq;
 using System.Data.Entity.Core.Objects;
+using System.IO;
+using System.Net.Mail;
 
 namespace Schooler.Teacher
 {
@@ -89,6 +91,12 @@ namespace Schooler.Teacher
                     && x.guid == guid)
                     .FirstOrDefault();
 
+                // Получаем изображение
+                var schooler = db.schoolboys.Find(guid);
+
+                if (schooler.image != null)
+                    SchoolerImagePictureBox.Image = ByteToPicture(schooler.image);
+
                 if (cAttendance == null)
                 {
 
@@ -99,13 +107,32 @@ namespace Schooler.Teacher
                     nAttendance.arrival_time = DateTime.Now;
 
                     db.attendances.Add(nAttendance);
+
+                    // Отправляем уведомление
+                    SendMessage($"{schooler.name} пришел в школу в {nAttendance.arrival_time}", long.Parse(schooler.parent_telegramm_id));
                 }
                 else
                 {
                     cAttendance.time_of_departure = DateTime.Now;
+                    SendMessage($"{schooler.name} ушел из школы в {cAttendance.time_of_departure}", long.Parse(schooler.parent_telegramm_id));
                 }
                 db.SaveChanges();
             }
+        }
+
+        private void SendMessage(string message, long chatId)
+        {
+            Telegram.Bot bot = new Telegram.Bot("7183072171:AAFtKZvZItrg998ge6pejZCqDZqu3Cq0ujo");
+            bot.Start();
+            bot.SendBeginMessage(message, chatId);
+
+        }
+
+        private Image ByteToPicture(byte[] stream)
+        {
+            // Преобразуем в изображение
+            using (var ms = new MemoryStream(stream))
+                return Image.FromStream(ms);
         }
 
         private void ScanButton_Click(object sender, EventArgs e)
@@ -120,6 +147,12 @@ namespace Schooler.Teacher
             using (Database.Model.Context db = new Database.Model.Context())
             {
                 Guid guid = Guid.Parse(result);
+
+                // Получаем изображение
+                var schooler = db.schoolboys.Find(guid);
+
+                if (schooler.image != null)
+                    SchoolerImagePictureBox.Image = ByteToPicture(schooler.image);
 
                 var cAttendance = db.attendances
                     .Where(x => x.arrival_time.Value.Year == DateTime.Now.Year
@@ -156,7 +189,11 @@ namespace Schooler.Teacher
 
         private void ScanQRCodeForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            FinalFrame.Stop();
+            try
+            {
+                FinalFrame.Stop();
+            }
+            catch { }
         }
     }
 }
